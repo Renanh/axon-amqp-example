@@ -1,0 +1,16 @@
+axon:
+  axonserver:
+    servers: "${AXONSERVER_HOST}:8124"
+  amqp:
+    exchange: "events"
+  eventhandling:
+    processors:
+      name:
+        source: myQueueMessageSource
+
+spring:
+  rabbitmq:
+    host: "${RABBITMQ_HOST}"
+    port: 5673
+    username: "${RABBITMQ_USER}"
+    password: "${RABBITMQ_PASS}"

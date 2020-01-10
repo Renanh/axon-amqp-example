@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+
+  axonserver:
+    image: axoniq/axonserver
+    hostname: axonserver
+    environment:
+      - AXONSERVER_HOSTNAME=axonserver
+    ports:
+      - 8024:8024
+
+  rabbitmq:
+    build: ./rabbitmq
+    ports:
+      - 15672:15672
+
+  command-service:
+    build:
+      context: .
+      dockerfile: ./command-service/Dockerfile
+    environment:
+      - AXONSERVER_HOST=axonserver
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_USER=test
+      - RABBITMQ_PASS=test
+    ports:
+      - 8081:8080
+    depends_on:
+      - rabbitmq
+      - axonserver
+
+  query-service:
+    build:
+      context: .
+      dockerfile: ./query-service/Dockerfile
+    environment:
+      - AXONSERVER_HOST=axonserver
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_USER=test
+      - RABBITMQ_PASS=test
+    ports:
+      - 8082:8080
+    depends_on:
+      - rabbitmq
+      - axonserver
